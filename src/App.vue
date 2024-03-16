@@ -1,26 +1,88 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <post-form @create-post="createPost" />
+  <div v-if="loadingPost">Loading...</div>
+  <post-list
+    v-else
+    :posts="posts"
+    :current-page="currentPage"
+    :totalPages="totalPages"
+    @delete-post="deletePost"
+    @change-current-page="changeCurrentPage"
+  />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { fetchPosts } from "./posts-client";
+
+import PostForm from "./PostForm.vue";
+import PostList from "./PostList.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    PostForm,
+    PostList,
+  },
+  data() {
+    return {
+      posts: [],
+      currentPage: 1,
+      limit: 10,
+      totalPages: 0,
+      loadingPost: false,
+    };
+  },
+  async mounted() {
+    await this.fetchPagePosts();
+  },
+  methods: {
+    createPost(post) {
+      if (post.title && post.description) {
+        this.posts.push(post);
+      }
+    },
+    deletePost(postToDelete) {
+      this.posts = this.posts.filter((post) => post.id !== postToDelete.id);
+    },
+    async changeCurrentPage(newCurrentPage) {
+      this.currentPage = newCurrentPage;
+      await this.fetchPagePosts();
+    },
+    async fetchPagePosts() {
+      try {
+        this.loadingPost = true;
+        const response = await fetchPosts({
+          page: this.currentPage,
+          limit: this.limit,
+        });
+        const responsePosts = response.data;
+        this.totalPages = Math.ceil(
+          response.headers["x-total-count"] / this.limit
+        );
+        this.posts = responsePosts.map((post) => ({
+          id: post.id,
+          title: post.title,
+          description: post.body,
+        }));
+      } catch (e) {
+        console.log(e);
+        this.posts = [];
+      } finally {
+        this.loadingPost = false;
+      }
+    },
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin: 15px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 </style>
