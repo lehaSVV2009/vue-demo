@@ -1,5 +1,10 @@
 <template>
-  <post-form @create-post="createPost" />
+  <v-btn @click="showCreatePostDialog = true">Create post</v-btn>
+  <v-dialog v-model="showCreatePostDialog">
+    <v-card class="create-post-card" title="Create post">
+      <post-form @create-post="createPost" />
+    </v-card>
+  </v-dialog>
   <div v-if="loadingPost">Loading...</div>
   <post-list
     v-else
@@ -30,6 +35,7 @@ export default {
       limit: 10,
       totalPages: 0,
       loadingPost: false,
+      showCreatePostDialog: false,
     };
   },
   async mounted() {
@@ -40,6 +46,7 @@ export default {
       if (post.title && post.description) {
         this.posts.push(post);
       }
+      this.showCreatePostDialog = false;
     },
     deletePost(postToDelete) {
       this.posts = this.posts.filter((post) => post.id !== postToDelete.id);
@@ -84,5 +91,9 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.create-post-card {
+  padding: 20px !important;
 }
 </style>
