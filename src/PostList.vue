@@ -2,7 +2,7 @@
   <div v-if="Array.isArray(posts) && posts.length > 0">
     <transition-group name="posts" tag="div">
       <div class="post" v-for="post in posts" :key="post.id">
-        <post-list-item :post="post" @deletePost="deletePost" />
+        <post-list-item :post="post" @deletePost="deletePost" @openPost="openPost" />
       </div>
     </transition-group>
   </div>
@@ -30,6 +30,9 @@ export default {
   methods: {
     deletePost(post) {
       this.$emit("delete-post", post);
+    },
+    openPost(post) {
+      this.$emit("open-post", post);
     },
     changeCurrentPage(newCurrentPage) {
       this.$emit("change-current-page", newCurrentPage);

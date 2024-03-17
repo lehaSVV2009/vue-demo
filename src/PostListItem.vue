@@ -3,15 +3,10 @@
     <v-card-title>{{ post.title }}</v-card-title>
     <v-card-text>{{ post.description }}</v-card-text>
     <v-card-actions>
-      <v-btn
-        prepend-icon="mdi-delete-forever"
-        color="teal-accent-4"
-        variant="text"
-        @click="deletePost(post)"
+      <v-btn color="teal-accent-4" variant="text" @click="openPost(post)">
+        Open</v-btn
       >
-        <template v-slot:prepend>
-          <v-icon icon="mdi-delete-forever"></v-icon>
-        </template>
+      <v-btn color="teal-accent-4" variant="text" @click="deletePost(post)">
         Delete</v-btn
       >
     </v-card-actions>
@@ -30,6 +25,9 @@ export default {
     deletePost(post) {
       this.$emit("delete-post", post);
     },
+    openPost(post) {
+      this.$emit("open-post", post);
+    }
   },
 };
 </script>
