@@ -1,8 +1,10 @@
 <template>
   <div v-if="Array.isArray(posts) && posts.length > 0">
-    <div class="post" v-for="post in posts" :key="post.id">
-      <post-list-item :post="post" @deletePost="deletePost" />
-    </div>
+    <transition-group name="posts" tag="div">
+      <div class="post" v-for="post in posts" :key="post.id">
+        <post-list-item :post="post" @deletePost="deletePost" />
+      </div>
+    </transition-group>
   </div>
   <div v-else>No posts</div>
   <v-pagination
@@ -30,8 +32,8 @@ export default {
       this.$emit("delete-post", post);
     },
     changeCurrentPage(newCurrentPage) {
-      this.$emit("change-current-page",newCurrentPage)
-    }
+      this.$emit("change-current-page", newCurrentPage);
+    },
   },
 };
 </script>
@@ -39,5 +41,15 @@ export default {
 <style scoped>
 .post {
   margin: 10px 0px;
+}
+
+.posts-enter-active,
+.posts-leave-active {
+  transition: all 1s;
+}
+
+.posts-enter, .posts-leave-to /* .list-leave-active до версии 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>
