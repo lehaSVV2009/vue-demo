@@ -1,5 +1,13 @@
 <template>
-  <v-btn @click="showCreatePostDialog = true">Create post</v-btn>
+  <v-row align="center" no-gutters>
+    <v-col cols="3">
+      <v-btn @click="showCreatePostDialog = true">Create post</v-btn>
+    </v-col>
+    <v-col>
+      <v-text-field v-model="searchText" placeholder="Search" />
+    </v-col>
+  </v-row>
+
   <v-dialog v-model="showCreatePostDialog">
     <v-card class="create-post-card" title="Create post">
       <post-form @create-post="createPost" />
@@ -8,7 +16,7 @@
   <div v-if="loadingPost">Loading...</div>
   <post-list
     v-else
-    :posts="posts"
+    :posts="filteredPosts"
     :current-page="currentPage"
     :totalPages="totalPages"
     @delete-post="deletePost"
@@ -34,6 +42,7 @@ export default {
       currentPage: 1,
       limit: 10,
       totalPages: 0,
+      searchText: "",
       loadingPost: false,
       showCreatePostDialog: false,
     };
@@ -41,10 +50,20 @@ export default {
   async mounted() {
     await this.fetchPagePosts();
   },
+  computed: {
+    filteredPosts() {
+      if (!this.searchText) {
+        return this.posts;
+      }
+      return this.posts.filter((post) =>
+        post.title.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    },
+  },
   methods: {
     createPost(post) {
       if (post.title && post.description) {
-        this.posts.push(post);
+        this.posts = [post, ...this.posts];
       }
       this.showCreatePostDialog = false;
     },
