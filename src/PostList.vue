@@ -45,11 +45,11 @@ export default {
 
 .posts-enter-active,
 .posts-leave-active {
-  transition: all 1s;
+  transition: all 0.5s;
 }
 
 .posts-enter, .posts-leave-to /* .list-leave-active до версии 2.1.8 */ {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateX(130px);
 }
 </style>
