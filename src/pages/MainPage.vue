@@ -1,12 +1,10 @@
 <template>
-  <h1>Home page</h1>
+  <vue-viewport><h1>Vue Posts Demo</h1></vue-viewport>
 </template>
 
 <script>
-export default {
-}
+export default {};
 </script>
 
 <style>
-
 </style>

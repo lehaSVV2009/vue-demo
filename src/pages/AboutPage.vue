@@ -1,5 +1,5 @@
 <template>
-  <h1>About</h1>
+  <vue-viewport><h1>App to learn vue basics</h1></vue-viewport>
 </template>
 
 <script>
