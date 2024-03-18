@@ -14,7 +14,7 @@ export default {
 
 <style>
 #app {
-  margin: 15px;
+  margin: 80px 15px 15px 15px;
 }
 
 * {
