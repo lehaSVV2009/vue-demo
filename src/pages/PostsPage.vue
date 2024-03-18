@@ -6,6 +6,14 @@
     <v-col>
       <v-text-field v-model="searchText" placeholder="Search" />
     </v-col>
+    <v-col cols="3">
+      <v-select
+        class="ml-2"
+        label="Sort"
+        v-model="selectedSort"
+        :items="sortOptions"
+      />
+    </v-col>
   </v-row>
 
   <v-dialog v-model="showCreatePostDialog">
@@ -16,7 +24,7 @@
   <div v-if="loadingPost">Loading...</div>
   <post-list
     v-else
-    :posts="filteredPosts"
+    :posts="filteredAndSortedPosts"
     :current-page="currentPage"
     :totalPages="totalPages"
     @delete-post="deletePost"
@@ -44,6 +52,12 @@ export default {
       limit: 10,
       totalPages: 0,
       searchText: "",
+      selectedSort: "",
+      sortOptions: [
+        { title: "", value: "" },
+        { title: "Title", value: "title" },
+        { title: "Description", value: "description" },
+      ],
       loadingPost: false,
       showCreatePostDialog: false,
     };
@@ -59,6 +73,17 @@ export default {
       return this.posts.filter((post) =>
         post.title.toLowerCase().includes(this.searchText.toLowerCase())
       );
+    },
+    filteredAndSortedPosts() {
+      let posts = this.filteredPosts;
+      if (this.selectedSort) {
+        posts = [...posts].sort((post1, post2) => {
+          return post1[this.selectedSort]?.localeCompare(
+            post2[this.selectedSort]
+          );
+        });
+      }
+      return posts;
     },
   },
   methods: {
