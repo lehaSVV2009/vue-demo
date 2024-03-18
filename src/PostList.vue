@@ -2,15 +2,19 @@
   <div v-if="Array.isArray(posts) && posts.length > 0">
     <transition-group name="posts" tag="div">
       <div class="post" v-for="post in posts" :key="post.id">
-        <post-list-item :post="post" @deletePost="deletePost" @openPost="openPost" />
+        <post-list-item
+          :post="post"
+          @deletePost="deletePost"
+          @openPost="openPost"
+        />
       </div>
     </transition-group>
   </div>
   <div v-else>No posts</div>
   <v-pagination
-    :modelValue="currentPage"
+    :model-value="currentPage"
     :length="totalPages"
-    @update:modelValue="changeCurrentPage"
+    @update:model-value="changeCurrentPage"
     rounded="circle"
   ></v-pagination>
 </template>

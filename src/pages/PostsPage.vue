@@ -24,9 +24,9 @@
   <div v-if="loadingPost">Loading...</div>
   <post-list
     v-else
-    :posts="filteredAndSortedPosts"
+    :posts="filteredAndSortedAndPagedPosts"
     :current-page="currentPage"
-    :totalPages="totalPages"
+    :total-pages="totalPages"
     @delete-post="deletePost"
     @open-post="openPost"
     @change-current-page="changeCurrentPage"
@@ -50,7 +50,6 @@ export default {
       posts: [],
       currentPage: 1,
       limit: 10,
-      totalPages: 0,
       searchText: "",
       selectedSort: "",
       sortOptions: [
@@ -62,10 +61,13 @@ export default {
       showCreatePostDialog: false,
     };
   },
-  async mounted() {
-    await this.fetchPagePosts();
+  mounted() {
+    this.fetchPagePosts();
   },
   computed: {
+    totalPages() {
+      return Math.ceil(this.posts.length / this.limit);
+    },
     filteredPosts() {
       if (!this.searchText) {
         return this.posts;
@@ -85,6 +87,21 @@ export default {
       }
       return posts;
     },
+    filteredAndSortedAndPagedPosts() {
+      if (this.filteredAndSortedPosts.length === 0) {
+        return this.filteredAndSortedPosts;
+      }
+      const currentPageFirstPostIndex = this.limit * (this.currentPage - 1);
+      const currentPageLastPostIndex = Math.min(
+        this.filteredAndSortedPosts.length - 1,
+        this.limit * this.currentPage - 1
+      );
+      return this.filteredAndSortedPosts.filter(
+        (post, postIndex) =>
+          postIndex >= currentPageFirstPostIndex &&
+          postIndex <= currentPageLastPostIndex
+      );
+    },
   },
   methods: {
     createPost(post) {
@@ -99,21 +116,14 @@ export default {
     openPost(postToOpen) {
       this.$router.push(`/posts/${postToOpen.id}`);
     },
-    async changeCurrentPage(newCurrentPage) {
+    changeCurrentPage(newCurrentPage) {
       this.currentPage = newCurrentPage;
-      await this.fetchPagePosts();
     },
     async fetchPagePosts() {
       try {
         this.loadingPost = true;
-        const response = await fetchPosts({
-          page: this.currentPage,
-          limit: this.limit,
-        });
+        const response = await fetchPosts();
         const responsePosts = response.data;
-        this.totalPages = Math.ceil(
-          response.headers["x-total-count"] / this.limit
-        );
         this.posts = responsePosts.map((post) => ({
           id: post.id,
           title: post.title,
