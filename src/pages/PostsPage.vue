@@ -4,13 +4,18 @@
       <v-btn @click="showCreatePostDialog = true">Create post</v-btn>
     </v-col>
     <v-col>
-      <v-text-field v-model="searchText" placeholder="Search" />
+      <v-text-field
+        :model-value="searchText"
+        @update:model-value="setSearchText"
+        placeholder="Search"
+      />
     </v-col>
     <v-col cols="3">
       <v-select
         class="ml-2"
         label="Sort"
-        v-model="selectedSort"
+        :model-value="selectedSort"
+        @update:model-value="setSelectedSort"
         :items="sortOptions"
       />
     </v-col>
@@ -21,7 +26,7 @@
       <post-form @create-post="createPost" />
     </v-card>
   </v-dialog>
-  <div v-if="loadingPost">Loading...</div>
+  <div v-if="isLoadingPost">Loading...</div>
   <post-list
     v-else
     :posts="filteredAndSortedAndPagedPosts"
@@ -29,12 +34,12 @@
     :total-pages="totalPages"
     @delete-post="deletePost"
     @open-post="openPost"
-    @change-current-page="changeCurrentPage"
+    @change-current-page="setCurrentPage"
   />
 </template>
 
 <script>
-import { fetchPosts } from "../posts-client";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 import PostForm from "../PostForm.vue";
 import PostList from "../PostList.vue";
@@ -47,94 +52,51 @@ export default {
   },
   data() {
     return {
-      posts: [],
-      currentPage: 1,
-      limit: 10,
-      searchText: "",
-      selectedSort: "",
       sortOptions: [
         { title: "", value: "" },
         { title: "Title", value: "title" },
         { title: "Description", value: "description" },
       ],
-      loadingPost: false,
       showCreatePostDialog: false,
     };
   },
   mounted() {
-    this.fetchPagePosts();
+    this.fetchAllPosts();
   },
   computed: {
-    totalPages() {
-      return Math.ceil(this.posts.length / this.limit);
-    },
-    filteredPosts() {
-      if (!this.searchText) {
-        return this.posts;
-      }
-      return this.posts.filter((post) =>
-        post.title.toLowerCase().includes(this.searchText.toLowerCase())
-      );
-    },
-    filteredAndSortedPosts() {
-      let posts = this.filteredPosts;
-      if (this.selectedSort) {
-        posts = [...posts].sort((post1, post2) => {
-          return post1[this.selectedSort]?.localeCompare(
-            post2[this.selectedSort]
-          );
-        });
-      }
-      return posts;
-    },
-    filteredAndSortedAndPagedPosts() {
-      if (this.filteredAndSortedPosts.length === 0) {
-        return this.filteredAndSortedPosts;
-      }
-      const currentPageFirstPostIndex = this.limit * (this.currentPage - 1);
-      const currentPageLastPostIndex = Math.min(
-        this.filteredAndSortedPosts.length - 1,
-        this.limit * this.currentPage - 1
-      );
-      return this.filteredAndSortedPosts.filter(
-        (post, postIndex) =>
-          postIndex >= currentPageFirstPostIndex &&
-          postIndex <= currentPageLastPostIndex
-      );
-    },
+    ...mapState({
+      posts: (state) => state.posts.posts,
+      currentPage: (state) => state.posts.currentPage,
+      limit: (state) => state.posts.limit,
+      searchText: (state) => state.posts.searchText,
+      selectedSort: (state) => state.posts.selectedSort,
+      isLoadingPost: (state) => state.posts.isLoadingPost,
+    }),
+    ...mapGetters({
+      totalPages: "posts/totalPages",
+      filteredAndSortedAndPagedPosts: "posts/filteredAndSortedAndPagedPosts",
+    }),
   },
   methods: {
+    ...mapMutations({
+      setCurrentPage: "posts/setCurrentPage",
+      setPosts: "posts/setPosts",
+      setSearchText: "posts/setSearchText",
+      setSelectedSort: "posts/setSelectedSort",
+    }),
+    ...mapActions({
+      fetchAllPosts: "posts/fetchAllPosts",
+      createPost: "posts/createPost",
+      deletePost: "posts/deletePost",
+    }),
     createPost(post) {
       if (post.title && post.description) {
-        this.posts = [post, ...this.posts];
+        this.setPosts([post, ...this.posts]);
       }
       this.showCreatePostDialog = false;
     },
-    deletePost(postToDelete) {
-      this.posts = this.posts.filter((post) => post.id !== postToDelete.id);
-    },
     openPost(postToOpen) {
       this.$router.push(`/posts/${postToOpen.id}`);
-    },
-    changeCurrentPage(newCurrentPage) {
-      this.currentPage = newCurrentPage;
-    },
-    async fetchPagePosts() {
-      try {
-        this.loadingPost = true;
-        const response = await fetchPosts();
-        const responsePosts = response.data;
-        this.posts = responsePosts.map((post) => ({
-          id: post.id,
-          title: post.title,
-          description: post.body,
-        }));
-      } catch (e) {
-        console.log(e);
-        this.posts = [];
-      } finally {
-        this.loadingPost = false;
-      }
     },
   },
 };
