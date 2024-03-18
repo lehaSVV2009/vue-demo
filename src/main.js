@@ -9,7 +9,7 @@ import { aliases, mdi } from "vuetify/iconsets/mdi";
 
 import App from "./App.vue";
 import router from "./routes/router";
-
+import store from "./store";
 import vueComponents from "./ui";
 
 const vuetify = createVuetify({
@@ -26,8 +26,8 @@ const vuetify = createVuetify({
 
 const app = createApp(App);
 
-vueComponents.forEach(component => {
+vueComponents.forEach((component) => {
   app.component(component.name, component);
-})
+});
 
-app.use(router).use(vuetify).mount("#app");
+app.use(router).use(store).use(vuetify).mount("#app");
