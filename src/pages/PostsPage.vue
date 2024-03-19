@@ -1,7 +1,7 @@
 <template>
   <v-row align="center" no-gutters>
-    <v-col cols="3">
-      <v-btn @click="showCreatePostDialog = true">Create post</v-btn>
+    <v-col class="mr-2" cols="2">
+      <v-btn class="mr-2" @click="showCreatePostDialog = true">Create post</v-btn>
     </v-col>
     <v-col>
       <v-text-field
