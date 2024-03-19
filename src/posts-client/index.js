@@ -1,12 +1,23 @@
 import axios from "axios";
 
+const client = axios.create({
+  baseURL: "https://jsonplaceholder.typicode.com",
+});
+
 const fetchPosts = async () => {
-  return await axios.get("https://jsonplaceholder.typicode.com/posts");
+  return await client.get("/posts");
 };
 
 const fetchPostById = async (id) => {
-  return await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`);
+  return await client.get(`/posts/${id}`);
 };
 
+const fetchPostComments = async (id) => {
+  return await client.get(`/posts/${id}/comments`);
+};
 
-export { fetchPostById, fetchPosts };
+const fetchUsers = async () => {
+  return await client.get("/users");
+};
+
+export { fetchPostById, fetchPosts, fetchPostComments, fetchUsers };
