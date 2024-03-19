@@ -5,7 +5,12 @@
     <h3>Post</h3>
     <post-list-item :post="post" :withButtons="false"></post-list-item>
     <h3 class="mt-4">Comments</h3>
-    <post-comment class="mt-2" v-for="comment in comments" :key="comment.id" :comment="comment" />
+    <post-comment
+      class="mt-2"
+      v-for="comment in comments"
+      :key="comment.id"
+      :comment="comment"
+    />
   </template>
   <div v-else>Post not found</div>
 </template>
