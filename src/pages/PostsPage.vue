@@ -96,7 +96,7 @@ export default {
       this.showCreatePostDialog = false;
     },
     openPost(postToOpen) {
-      this.$router.push(`/posts/${postToOpen.id}`);
+      this.$router.push(`/vuex-posts/${postToOpen.id}`);
     },
   },
 };
