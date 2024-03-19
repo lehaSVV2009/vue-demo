@@ -4,4 +4,9 @@ const fetchPosts = async () => {
   return await axios.get("https://jsonplaceholder.typicode.com/posts");
 };
 
-export { fetchPosts };
+const fetchPostById = async (id) => {
+  return await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`);
+};
+
+
+export { fetchPostById, fetchPosts };

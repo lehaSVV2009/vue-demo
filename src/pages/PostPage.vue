@@ -1,15 +1,16 @@
 <template>
   <div v-if="isLoadingPost">Loading...</div>
   <post-list-item
-    v-else-if="!!selectedPost($route.params.id)"
-    :post="selectedPost($route.params.id)"
+    v-else-if="post"
+    :post="post"
     :withButtons="false"
   ></post-list-item>
   <div v-else>Post not found</div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
+
 import PostListItem from "../PostListItem.vue";
 
 export default {
@@ -18,18 +19,16 @@ export default {
   },
   computed: {
     ...mapState({
-      isLoadingPost: (state) => state.posts.isLoadingPost,
-    }),
-    ...mapGetters({
-      selectedPost: "posts/selectedPost",
+      isLoadingPost: (state) => state.postItem.isLoadingPost,
+      post: (state) => state.postItem.post,
     }),
   },
   mounted() {
-    this.fetchAllPosts();
+    this.fetchPost(this.$route.params.id);
   },
   methods: {
     ...mapActions({
-      fetchAllPosts: "posts/fetchAllPosts",
+      fetchPost: "postItem/fetchPost",
     }),
   },
 };
