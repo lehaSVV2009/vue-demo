@@ -1,4 +1,6 @@
-# vue-demo
+# vue-posts-demo
+
+[Online demo](https://lehasvv2009.github.io/vue-posts-demo/)
 
 ## Project setup
 ```
