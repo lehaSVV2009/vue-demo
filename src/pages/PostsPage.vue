@@ -41,8 +41,8 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
-import PostForm from "../PostForm.vue";
-import PostList from "../PostList.vue";
+import PostForm from "../components/PostForm.vue";
+import PostList from "../components/PostList.vue";
 
 export default {
   name: "App",

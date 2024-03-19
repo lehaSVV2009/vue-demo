@@ -12,7 +12,7 @@ const fetchPostById = async (id) => {
   return await client.get(`/posts/${id}`);
 };
 
-const fetchPostComments = async (id) => {
+const fetchPostCommentsByPostId = async (id) => {
   return await client.get(`/posts/${id}/comments`);
 };
 
@@ -20,4 +20,4 @@ const fetchUsers = async () => {
   return await client.get("/users");
 };
 
-export { fetchPostById, fetchPosts, fetchPostComments, fetchUsers };
+export { fetchPostById, fetchPosts, fetchPostCommentsByPostId, fetchUsers };

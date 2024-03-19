@@ -1,9 +1,11 @@
-import { fetchPostById } from "../posts-client";
+import { fetchPostById, fetchPostCommentsByPostId } from "../posts-client";
 
 export const postItem = {
   state: () => ({
     isLoadingPost: false,
+    isLoadingPostComments: false,
     post: null,
+    comments: [],
   }),
   mutations: {
     setIsLoadingPost(state, isLoadingPost) {
@@ -11,6 +13,12 @@ export const postItem = {
     },
     setPost(state, post) {
       state.post = post;
+    },
+    setIsLoadingPostComments(state, isLoadingPostComments) {
+      state.isLoadingPostComments = isLoadingPostComments;
+    },
+    setPostComments(state, comments) {
+      state.comments = comments;
     },
   },
   actions: {
@@ -25,6 +33,18 @@ export const postItem = {
         commit("setPost", null);
       } finally {
         commit("setIsLoadingPost", false);
+      }
+    },
+    async fetchPostComments({ commit }, postId) {
+      try {
+        commit("setIsPostCommentsLoading", true);
+        const response = await fetchPostCommentsByPostId(postId);
+        commit("setPostComments", response.data);
+      } catch (e) {
+        console.log(e);
+        commit("setPostComments", []);
+      } finally {
+        commit("setIsPostCommentsLoading", false);
       }
     },
   },
