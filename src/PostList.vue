@@ -4,6 +4,7 @@
       <div class="post" v-for="post in posts" :key="post.id">
         <post-list-item
           :post="post"
+          withButtons
           @deletePost="deletePost"
           @openPost="openPost"
         />

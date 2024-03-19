@@ -10,7 +10,7 @@
         placeholder="Search"
       />
     </v-col>
-    <v-col cols="3">
+    <v-col cols="2">
       <v-select
         class="ml-2"
         label="Sort"

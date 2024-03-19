@@ -10,6 +10,14 @@ export const posts = {
     isLoadingPost: false,
   }),
   getters: {
+    selectedPost: (state) => (postId) => {
+      try {
+        const postIdNumber = parseInt(postId);
+        return state.posts.find((post) => post.id === postIdNumber);
+      } catch (e) {
+        return null;
+      }
+    },
     totalPages(state) {
       return Math.ceil(state.posts.length / state.limit);
     },
@@ -67,7 +75,10 @@ export const posts = {
   },
   actions: {
     deletePost({ state, commit }, postToDelete) {
-      commit("setPosts", state.posts.filter((post) => post.id !== postToDelete.id))
+      commit(
+        "setPosts",
+        state.posts.filter((post) => post.id !== postToDelete.id)
+      );
     },
     async fetchAllPosts({ commit }) {
       try {

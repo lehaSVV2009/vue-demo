@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>{{ post.title }}</v-card-title>
     <v-card-text>{{ post.description }}</v-card-text>
-    <v-card-actions>
+    <v-card-actions v-if="withButtons">
       <v-btn color="teal-accent-4" variant="text" @click="openPost(post)">
         Open</v-btn
       >
@@ -19,6 +19,9 @@ export default {
     post: {
       type: Object,
       required: true,
+    },
+    withButtons: {
+      type: Boolean,
     },
   },
   methods: {
