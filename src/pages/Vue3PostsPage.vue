@@ -1,24 +1,42 @@
 <template>
-  <div>Likes: {{ this.likes }}</div>
-  <v-btn @click="incrementLikes">Like</v-btn>
+  <div v-if="isLoadingPost">Loading...</div>
+  <post-list
+    v-else
+    :posts="posts"
+    :current-page="1"
+    :total-pages="1"
+    @delete-post="deletePost"
+    @open-post="openPost"
+    @change-current-page="setCurrentPage"
+  />
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-export default {
-  setup() {
-    const likes = ref(0);
-    
-    onMounted(() => {
-      console.log(likes);
-    })
+import PostList from "../components/PostList.vue";
+import usePosts from "../hooks/usePosts";
 
-    return { likes };
+export default {
+  components: {
+    PostList,
   },
-  methods: {
-    incrementLikes() {
-      this.likes++;
-    }
-  }
+  setup() {
+    const {
+      posts,
+      isLoadingPost,
+      currentPage,
+      openPost,
+      deletePost,
+      setCurrentPage,
+    } = usePosts();
+
+    return {
+      posts,
+      isLoadingPost,
+      currentPage,
+      openPost,
+      deletePost,
+      setCurrentPage,
+    };
+  },
 };
 </script>
