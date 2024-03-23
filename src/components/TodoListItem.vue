@@ -8,6 +8,8 @@ defineProps({ todo: { type: Object, required: true } });
   <v-card>
     <v-card-title>{{ todo.title }}</v-card-title>
     <v-card-subtitle>{{ todo.user?.email }}</v-card-subtitle>
-    <v-card-text>{{ todo.completed ? "Completed" : "To do" }}</v-card-text>
+    <v-card-text :class="todo.completed ? 'bg-green' : 'bg-red'">{{
+      todo.completed ? "Completed" : "To do"
+    }}</v-card-text>
   </v-card>
 </template>
