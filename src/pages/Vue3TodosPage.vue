@@ -31,7 +31,7 @@ const searchText = ref("");
 
 const COMPLETED_TYPES = reactive([
   {
-    title: "",
+    title: "All",
     value: "",
   },
   {
@@ -83,11 +83,11 @@ const filteredAndSearchedCompletedTodos = computed(() => {
 
 <template>
   <v-row>
-    <v-col cols="3"><h1>Vue 3 Todos</h1></v-col>
-    <v-col cols="6">
+    <v-col cols="12" md="3"><h1>Vue 3 Todos</h1></v-col>
+    <v-col cols="12" md="6">
       <v-text-field v-model="searchText" placeholder="Search..." />
     </v-col>
-    <v-col cols="3">
+    <v-col cols="12" md="3">
       <v-select
         :items="COMPLETED_TYPES"
         v-model="completedFilter"
@@ -97,7 +97,7 @@ const filteredAndSearchedCompletedTodos = computed(() => {
   </v-row>
   <div v-if="isFetchingTodos">Loading todos...</div>
   <v-row v-else>
-    <v-col cols="3" v-for="todo in filteredAndSearchedCompletedTodos" :key="todo.id">
+    <v-col cols="12" md="3" v-for="todo in filteredAndSearchedCompletedTodos" :key="todo.id">
       <todo-list-item :todo="todo"></todo-list-item>
     </v-col>
   </v-row>
