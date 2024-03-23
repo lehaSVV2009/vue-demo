@@ -60,10 +60,6 @@ onMounted(() => {
     });
 });
 
-const selectCompletedFilter = (filter) => {
-  completedFilter.value = filter;
-};
-
 const filteredCompletedTodos = computed(() => {
   if (completedFilter.value === "completed") {
     return todos.value.filter((todo) => todo.completed);
@@ -81,8 +77,7 @@ const filteredCompletedTodos = computed(() => {
     <v-col cols="3" offset="6">
       <v-select
         :items="COMPLETED_TYPES"
-        :model-value="completedFilter"
-        @update:model-value="selectCompletedFilter"
+        v-model="completedFilter"
         label="Select completed type"
       />
     </v-col>
