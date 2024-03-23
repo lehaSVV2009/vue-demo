@@ -5,6 +5,7 @@ import MainPage from "@/pages/MainPage.vue";
 import PostsPage from "@/pages/PostsPage.vue";
 import PostPage from "@/pages/PostPage.vue";
 import Vue3PostsPage from "@/pages/Vue3PostsPage.vue";
+import Vue3TodosPage from "@/pages/Vue3TodosPage.vue";
 
 const routes = [
   {
@@ -26,6 +27,10 @@ const routes = [
   {
     path: "/vue3-posts",
     component: Vue3PostsPage,
+  },
+  {
+    path: "/vue3-todos",
+    component: Vue3TodosPage,
   },
 ];
 
