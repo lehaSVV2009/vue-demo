@@ -12,6 +12,7 @@ export default {
   methods: {
     login() {
       this.$store.commit("auth/login");
+      this.$router.push('/vuex-posts');
     },
     logout() {
       this.$store.commit("auth/logout");
