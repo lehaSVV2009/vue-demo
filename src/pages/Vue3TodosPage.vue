@@ -27,6 +27,7 @@ const fetchAllUsers = async () => {
 const isFetchingTodos = ref(false);
 const todos = ref([]);
 const completedFilter = ref("");
+const searchText = ref("");
 
 const COMPLETED_TYPES = reactive([
   {
@@ -60,21 +61,33 @@ onMounted(() => {
     });
 });
 
-const filteredCompletedTodos = computed(() => {
-  if (completedFilter.value === "completed") {
-    return todos.value.filter((todo) => todo.completed);
+const filterCompletedTodos = (completedFilter, todos) => {
+  if (completedFilter === "completed") {
+    return todos.filter((todo) => todo.completed);
   }
-  if (completedFilter.value === "todo") {
-    return todos.value.filter((todo) => !todo.completed);
+  if (completedFilter === "todo") {
+    return todos.filter((todo) => !todo.completed);
   }
-  return todos.value;
+  return todos;
+}
+
+const filteredAndSearchedCompletedTodos = computed(() => {
+  const filteredTodos = filterCompletedTodos(completedFilter.value, todos.value);
+  if (!searchText.value) {
+    return filteredTodos;
+  }
+  return filteredTodos.filter(todo => todo.title.toLowerCase().includes(searchText.value.toLowerCase()))
 });
+
 </script>
 
 <template>
   <v-row>
     <v-col cols="3"><h1>Vue 3 Todos</h1></v-col>
-    <v-col cols="3" offset="6">
+    <v-col cols="6">
+      <v-text-field v-model="searchText" placeholder="Search..." />
+    </v-col>
+    <v-col cols="3">
       <v-select
         :items="COMPLETED_TYPES"
         v-model="completedFilter"
@@ -84,7 +97,7 @@ const filteredCompletedTodos = computed(() => {
   </v-row>
   <div v-if="isFetchingTodos">Loading todos...</div>
   <v-row v-else>
-    <v-col cols="3" v-for="todo in filteredCompletedTodos" :key="todo.id">
+    <v-col cols="3" v-for="todo in filteredAndSearchedCompletedTodos" :key="todo.id">
       <todo-list-item :todo="todo"></todo-list-item>
     </v-col>
   </v-row>
