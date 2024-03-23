@@ -1,18 +1,17 @@
 <template>
-  <v-row align="center" no-gutters>
-    <v-col class="mr-2" cols="2">
-      <v-btn class="mr-2" @click="showCreatePostDialog = true">Create post</v-btn>
+  <v-row align="center">
+    <v-col cols="12" md="3">
+      <v-btn @click="showCreatePostDialog = true">Create post</v-btn>
     </v-col>
-    <v-col>
+    <v-col cols="12" md="6">
       <v-text-field
         :model-value="searchText"
         @update:model-value="setSearchText"
         placeholder="Search"
       />
     </v-col>
-    <v-col cols="2">
+    <v-col cols="12" md="3">
       <v-select
-        class="ml-2"
         label="Sort"
         :model-value="selectedSort"
         @update:model-value="setSelectedSort"
