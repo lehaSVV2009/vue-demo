@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 
 import TodoListItem from "@/components/TodoListItem.vue";
 import { fetchTodos, fetchUsers } from "@/posts-client";
@@ -69,16 +70,25 @@ const filterCompletedTodos = (completedFilter, todos) => {
     return todos.filter((todo) => !todo.completed);
   }
   return todos;
-}
+};
 
 const filteredAndSearchedCompletedTodos = computed(() => {
-  const filteredTodos = filterCompletedTodos(completedFilter.value, todos.value);
+  const filteredTodos = filterCompletedTodos(
+    completedFilter.value,
+    todos.value
+  );
   if (!searchText.value) {
     return filteredTodos;
   }
-  return filteredTodos.filter(todo => todo.title.toLowerCase().includes(searchText.value.toLowerCase()))
+  return filteredTodos.filter((todo) =>
+    todo.title.toLowerCase().includes(searchText.value.toLowerCase())
+  );
 });
 
+const router = useRouter();
+const openTodo = (todo) => {
+  router.push(`/vue3-todos/${todo.id}`);
+};
 </script>
 
 <template>
@@ -97,8 +107,13 @@ const filteredAndSearchedCompletedTodos = computed(() => {
   </v-row>
   <div v-if="isFetchingTodos">Loading todos...</div>
   <v-row v-else>
-    <v-col cols="12" md="3" v-for="todo in filteredAndSearchedCompletedTodos" :key="todo.id">
-      <todo-list-item :todo="todo"></todo-list-item>
+    <v-col
+      cols="12"
+      md="3"
+      v-for="todo in filteredAndSearchedCompletedTodos"
+      :key="todo.id"
+    >
+      <todo-list-item :todo="todo" @open-todo="openTodo"></todo-list-item>
     </v-col>
   </v-row>
 </template>

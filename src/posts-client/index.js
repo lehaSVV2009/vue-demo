@@ -20,8 +20,24 @@ const fetchUsers = async () => {
   return await client.get("/users");
 };
 
+const fetchUserById = async (id) => {
+  return await client.get(`/users/${id}`);
+};
+
 const fetchTodos = async () => {
   return await client.get("/todos");
 };
 
-export { fetchPostById, fetchPosts, fetchPostCommentsByPostId, fetchUsers, fetchTodos };
+const fetchTodoById = async (id) => {
+  return await client.get(`/todos/${id}`);
+};
+
+export {
+  fetchPostById,
+  fetchPosts,
+  fetchPostCommentsByPostId,
+  fetchUsers,
+  fetchUserById,
+  fetchTodos,
+  fetchTodoById,
+};
