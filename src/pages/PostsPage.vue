@@ -25,7 +25,7 @@
       <post-form @create-post="createPost" />
     </v-card>
   </v-dialog>
-  <div v-if="isLoadingPost">Loading...</div>
+  <v-progress-linear indeterminate v-if="isLoadingPost" />
   <post-list
     v-else
     :posts="filteredAndSortedAndPagedPosts"

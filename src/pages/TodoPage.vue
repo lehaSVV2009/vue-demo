@@ -42,7 +42,7 @@ const back = () => {
 </script>
 
 <template>
-  <div v-if="isLoadingTodo">Loading todo...</div>
+  <v-progress-linear indeterminate v-if="isLoadingTodo" />
   <div v-else-if="!todo.id">Todo not found</div>
   <todo-card v-else :todo="todo" @back="back" />
 </template>

@@ -1,6 +1,5 @@
 <template>
-  <div v-if="isLoadingPost">Loading post...</div>
-  <div v-else-if="isLoadingPostComments">Loading comments...</div>
+  <v-progress-linear indeterminate v-if="isLoadingPost || isLoadingPostComments" />
   <template v-else-if="post">
     <h3>Post</h3>
     <post-list-item :post="post" :withButtons="false"></post-list-item>

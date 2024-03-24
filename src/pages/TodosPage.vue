@@ -105,7 +105,7 @@ const openTodo = (todo) => {
       />
     </v-col>
   </v-row>
-  <div v-if="isFetchingTodos">Loading todos...</div>
+  <v-progress-linear indeterminate v-if="isFetchingTodos" />
   <v-row v-else>
     <v-col
       cols="12"
